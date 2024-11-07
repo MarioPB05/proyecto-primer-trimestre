@@ -35,9 +35,7 @@ public class Client {
     @Column(name = "registration_date", nullable = false)
     private LocalDate registration_date;
 
-    @Column(name = "location", nullable = false)
-    private String location;
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address addressId;
 }

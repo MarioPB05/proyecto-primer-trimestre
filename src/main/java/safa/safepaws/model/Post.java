@@ -35,12 +35,6 @@ public class Post {
     @Column(name = "photo", nullable = false)
     private String photo;
 
-    @Column(name = "coordinate_x",nullable = false)
-    private Integer coordinate_x;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private Integer coordinate_y;
-
     @Column(name = "status", nullable = false)
     private PostStatus status;
 
@@ -55,4 +49,8 @@ public class Post {
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address addressId;
 }
