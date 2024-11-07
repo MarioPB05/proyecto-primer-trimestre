@@ -27,7 +27,7 @@ public class Question {
     @Column(name = "required")
     private Boolean required;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "required_question")
     private Question requiredQuestion;
 }
