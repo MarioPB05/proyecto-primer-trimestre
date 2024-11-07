@@ -22,6 +22,7 @@ public class Question {
     private String question;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private QuestionType type;
 
     @Column(name = "required")

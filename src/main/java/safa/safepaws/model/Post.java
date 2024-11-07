@@ -24,7 +24,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client_id;
+    private Client client;
 
     @Column(name = "name" , nullable = false)
     private String name;
@@ -36,21 +36,23 @@ public class Post {
     private String photo;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PostStatus status;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private AnimalType type;
 
     @Column(name = "urgent", nullable = false)
     private boolean urgent;
 
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creation_date;
+    private LocalDate creationDate;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
     @OneToOne
     @JoinColumn(name = "address_id")
-    private Address addressId;
+    private Address address;
 }

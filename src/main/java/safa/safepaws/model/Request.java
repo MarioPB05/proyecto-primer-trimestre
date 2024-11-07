@@ -27,6 +27,7 @@ public class Request {
     private Timestamp creationDate;
 
     @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
     @Column(name = "deleted")
@@ -34,9 +35,9 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client clientId;
+    private Client client;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post postId;
+    private Post post;
 }

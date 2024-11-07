@@ -38,6 +38,6 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client_id;
+    private Client client;
 
 }
