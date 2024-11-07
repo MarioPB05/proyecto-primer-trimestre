@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client_id;
+    private Client client;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

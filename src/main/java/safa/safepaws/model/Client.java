@@ -33,11 +33,9 @@ public class Client {
     private String dni;
 
     @Column(name = "registration_date", nullable = false)
-    private LocalDate registration_date;
+    private LocalDate registrationDate;
 
-    @Column(name = "location", nullable = false)
-    private String location;
-
-
-
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 }

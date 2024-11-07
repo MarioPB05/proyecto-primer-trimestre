@@ -22,9 +22,9 @@ public class RequestAnswer {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
-    private Request requestId;
+    private Request request;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private Question questionId;
+    private Question question;
 }
