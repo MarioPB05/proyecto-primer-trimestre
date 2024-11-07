@@ -50,7 +50,7 @@ public class Post {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "address_id")
     private Address addressId;
 }

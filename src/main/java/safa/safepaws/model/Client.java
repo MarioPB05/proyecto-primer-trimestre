@@ -35,7 +35,7 @@ public class Client {
     @Column(name = "registration_date", nullable = false)
     private LocalDate registration_date;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "address_id")
     private Address addressId;
 }
