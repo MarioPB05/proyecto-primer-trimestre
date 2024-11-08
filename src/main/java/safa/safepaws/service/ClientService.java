@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.client.CreateClientRequest;
 import safa.safepaws.dto.client.EditClientRequest;
+import safa.safepaws.mapper.ClientMapper;
 import safa.safepaws.model.Client;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.ClientRepository;
@@ -14,15 +15,11 @@ import safa.safepaws.repository.ClientRepository;
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
     private final User authenticatedUser;
 
     public Client createClient(CreateClientRequest createClientRequest) {
-        Client client = new Client();
-        client.setName(createClientRequest.getName());
-        client.setSurname(createClientRequest.getSurname());
-        client.setBirthdate(createClientRequest.getBirthdate());
-        client.setDni(createClientRequest.getDni());
-        client.setAddress(createClientRequest.getAddress());
+        Client client = clientMapper.toEntity(createClientRequest);
         return clientRepository.save(client);
     }
 
