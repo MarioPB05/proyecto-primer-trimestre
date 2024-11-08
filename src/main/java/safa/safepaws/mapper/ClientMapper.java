@@ -1,6 +1,5 @@
 package safa.safepaws.mapper;
 
-import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
