@@ -5,17 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import safa.safepaws.model.Address;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateClientRequest {
-    private Integer id;
     private String name;
     private String surname;
     private String dni;
-    private LocalDate birthdate;
+    private String birthdate;
+    private String registrationDate;
     private Address address;
-
 }

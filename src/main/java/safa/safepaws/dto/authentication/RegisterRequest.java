@@ -19,7 +19,7 @@ public class RegisterRequest {
     private String name;
     private String surname;
     private String dni;
-    private LocalDate birthdate;
+    private String birthdate;
 
     private Float coordinateX;
     private Float coordinateY;
