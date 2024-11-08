@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.context.annotation.RequestScope;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.UserRepository;
 
@@ -48,6 +49,7 @@ public class ApplicationConfig {
     }
 
     @Bean
+    @RequestScope
     public User authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
