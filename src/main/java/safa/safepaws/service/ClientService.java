@@ -1,10 +1,12 @@
 package safa.safepaws.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import safa.safepaws.dto.ClientCreateDTO;
-import safa.safepaws.dto.ClientEditDTO;
-import safa.safepaws.mapper.ClientMapper;
+import org.springframework.web.server.ResponseStatusException;
+import safa.safepaws.dto.Client.createClientRequest;
+import safa.safepaws.dto.Client.editClientRequest;
 import safa.safepaws.model.Client;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.ClientRepository;
@@ -13,27 +15,31 @@ import safa.safepaws.repository.ClientRepository;
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
-    private final ClientMapper clientMapper = ClientMapper.INSTANCE;
-    private final User AuthenticatedUser;
     private final User authenticatedUser;
 
-    public Client createClient(ClientCreateDTO clientCreateDTO) {
-        Client client = clientMapper.toEntity(clientCreateDTO);
+    public Client createClient(createClientRequest createClientRequest) {
+        Client client = new Client();
+        client.setName(createClientRequest.getName());
+        client.setSurname(createClientRequest.getSurname());
+        client.setBirthdate(createClientRequest.getBirthdate());
+        client.setDni(createClientRequest.getDni());
+        client.setAddress(createClientRequest.getAddress());
         return clientRepository.save(client);
     }
 
-    public Client modifyClient(ClientEditDTO clientEditDTO) {
-        if (AuthenticatedUser.getClient().getId() == authenticatedUser.getClient().getId()) {
-            Client client = clientRepository.findById(clientEditDTO.getId())
+
+    public Client modifyClient(editClientRequest editClientRequest) {
+        if (authenticatedUser.getClient().getId() == authenticatedUser.getClient().getId()) {
+            Client client = clientRepository.findById(editClientRequest.getId())
                     .orElseThrow(() -> new RuntimeException("Client not found"));
-            client.setName(clientEditDTO.getName());
-            client.setSurname(clientEditDTO.getSurname());
-            client.setBirthdate(clientEditDTO.getBirthdate());
-            client.setDni(clientEditDTO.getDni());
-            client.setAddress(clientEditDTO.getAddress());
+            client.setName(editClientRequest.getName());
+            client.setSurname(editClientRequest.getSurname());
+            client.setBirthdate(editClientRequest.getBirthdate());
+            client.setDni(editClientRequest.getDni());
+            client.setAddress(editClientRequest.getAddress());
             return clientRepository.save(client);
         } else {
-            throw new RuntimeException("You are not authorized to modify this client");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You are not authorized to modify this client");
         }
     }
 

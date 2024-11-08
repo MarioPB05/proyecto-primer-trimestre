@@ -1,4 +1,4 @@
-package safa.safepaws.dto;
+package safa.safepaws.dto.Client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 @Data
-public class ClientEditDTO {
+public class editClientRequest {
 
     private Integer id;
     private String name;
