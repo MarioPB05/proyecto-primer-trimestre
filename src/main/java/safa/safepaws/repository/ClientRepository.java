@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer> {
     @Override
-    Optional<Client> findById(Integer integer);
+    Optional<Client> findById(Integer ClientId);
 }
