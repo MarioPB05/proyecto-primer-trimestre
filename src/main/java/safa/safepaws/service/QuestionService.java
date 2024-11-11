@@ -10,6 +10,9 @@ import safa.safepaws.mapper.QuestionMapper;
 import safa.safepaws.model.Question;
 import safa.safepaws.repository.QuestionRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -28,15 +31,14 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public QuestionResponse findUndeletedQuestion() {
-        Question question = questionRepository.findUndeletedQuestion()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No undeleted question found"));
-        return new QuestionResponse(
-                question.getQuestion(),
-                question.getType(),
-                question.getRequired(),
-                question.getRequiredQuestion() == null ? null : Integer.valueOf(question.getRequiredQuestion().getId())
-        );
+    public List<QuestionResponse> findUndeletedQuestion() {
+        List<Question> questions = questionRepository.findUndeletedQuestion();
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+        for (Question question : questions) {
+            QuestionResponse questionResponse = new QuestionResponse();
+        }
+        return questionResponses;
+
     }
 
 }

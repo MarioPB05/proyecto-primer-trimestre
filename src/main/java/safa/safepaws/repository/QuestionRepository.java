@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import safa.safepaws.model.Question;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
     @Query("SELECT q FROM Question q WHERE q.deleted = false")
-    Optional<Question> findUndeletedQuestion();
+    List<Question> findUndeletedQuestion();
 
     Optional<Question> findById(Integer questionId);
 }
