@@ -22,12 +22,16 @@ public class Question {
     private String question;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private QuestionType type;
 
     @Column(name = "required")
     private Boolean required;
 
-    @ManyToOne
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @OneToOne
     @JoinColumn(name = "required_question")
     private Question requiredQuestion;
 }
