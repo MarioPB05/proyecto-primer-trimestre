@@ -28,6 +28,9 @@ public class Question {
     @Column(name = "required")
     private Boolean required;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
     @OneToOne
     @JoinColumn(name = "required_question")
     private Question requiredQuestion;
