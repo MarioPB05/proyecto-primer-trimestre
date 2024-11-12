@@ -20,11 +20,11 @@ public class RequestAnswer {
     @Column(name = "answer")
     private String answer;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "request_id")
     private Request request;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "question_id")
     private Question question;
 }
