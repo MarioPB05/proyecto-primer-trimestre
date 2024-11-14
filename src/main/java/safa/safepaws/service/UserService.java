@@ -71,15 +71,15 @@ public class UserService {
         return AuthenticationResponse.builder().token(token).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest registerRequest) {
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        registerRequest.getUsername(),
-                        registerRequest.getPassword()
+                        authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()
                 )
         );
 
-        var user = userRepository.findTopByUsername(registerRequest.getUsername()).orElseThrow();
+        var user = userRepository.findTopByUsername(authenticationRequest.getUsername()).orElseThrow();
         var token = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder().token(token).build();
