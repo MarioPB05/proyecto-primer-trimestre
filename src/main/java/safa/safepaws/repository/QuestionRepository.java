@@ -16,4 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<Question> findUndeletedQuestion();
 
     Optional<Question> findById(Integer questionId);
+  
+    Optional<Question> findQuestionById(Integer id);
+  
 }
