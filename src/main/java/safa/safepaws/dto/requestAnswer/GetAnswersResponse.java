@@ -7,7 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetAnswersResponse {
     private Integer id;
-    private Integer questionId;
-    private Integer requestId;
+    private String question;
+    private Integer questionType;
+    private Boolean required;
     private String answer;
 }
