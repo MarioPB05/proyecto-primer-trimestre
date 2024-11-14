@@ -9,8 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface RequestAnswerMapper {
-    @Mapping(source = "question.id", target = "questionId")
-    @Mapping(source = "request.id", target = "requestId")
+    @Mapping(source = "question.question", target = "question")
+    @Mapping(source = "question.type", target = "questionType")
+    @Mapping(source = "question.required", target = "required")
     GetAnswersResponse toDTO(RequestAnswer requestAnswer);
     List<GetAnswersResponse> toDTO(List<RequestAnswer> requestAnswersList);
 }
