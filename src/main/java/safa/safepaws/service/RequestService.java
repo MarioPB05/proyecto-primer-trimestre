@@ -16,6 +16,7 @@ import safa.safepaws.repository.RequestRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,10 +84,10 @@ public class RequestService {
     }
 
 
-    public List<Request> getAdoptionPorOwner(Integer id){
+    public Optional<Request> getAdoptionPorOwner(Integer id){
         Request request = requestRepository.findById(id).orElse(null);
         if (Objects.requireNonNull(request).getClient().getId().equals(authenticatedUser.getClient().getId())) {
-            return requestRepository.findAll();
+            return requestRepository.findAllById(id);
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
