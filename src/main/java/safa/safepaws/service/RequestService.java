@@ -21,13 +21,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class RequestService {
-
-
     private RequestRepository requestRepository;
     private RequestMapper  requestMapper;
     private  User authenticatedUser;
     private final RequestAnswerRepository requestAnswerRepository;
-
 
     /**
      * Safe a new request
@@ -35,7 +32,7 @@ public class RequestService {
      * @param requestdto
      * @return
      */
-    public Request guardar(RequestCreateDTO requestdto) {
+    public Request save(RequestCreateDTO requestdto) {
         return requestRepository.save(requestMapper.toEntity(requestdto));
     }
 
@@ -45,7 +42,7 @@ public class RequestService {
      * @param requestdto
      * @return
      */
-    public Request modificar(RequestEditDTO requestdto){
+    public Request edit(RequestEditDTO requestdto){
         if (requestdto.getId().equals(authenticatedUser.getClient().getId())) {
             Request request = requestMapper.toEntity(requestdto);
             return requestRepository.save(request);
@@ -60,7 +57,7 @@ public class RequestService {
      * @param id
      * @return
      */
-    public String eliminar (Integer id){
+    public String delete (Integer id){
         Request request = requestRepository.findById(id).orElse(null);
         if (Objects.requireNonNull(request).getId().equals(authenticatedUser.getClient().getId())) {
             request.setDeleted(true);
@@ -83,7 +80,6 @@ public class RequestService {
         }
     }
 
-
     public Optional<Request> getAdoptionPorOwner(Integer id){
         Request request = requestRepository.findById(id).orElse(null);
         if (Objects.requireNonNull(request).getClient().getId().equals(authenticatedUser.getClient().getId())) {
@@ -92,12 +88,4 @@ public class RequestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
-
-
-
 }
