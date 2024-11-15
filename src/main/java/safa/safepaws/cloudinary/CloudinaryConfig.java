@@ -5,15 +5,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class CloudinaryConfig {
 
-    @Value("${cloudinary.cloud_name}")
+    @Value("${CLOUD_NAME}")
     private String cloudName;
 
-    @Value("${cloudinary.api_key}")
+    @Value("${CLOUD_API_KEY}")
     private String apiKey;
 
-    @Value("${cloudinary.api_secret}")
+    @Value("${CLOUD_API_SECRET}")
     private String apiSecret;
 
     @Bean
