@@ -16,7 +16,7 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Integer id;
 
     @Column(name = "question")
     private String question;
@@ -27,6 +27,9 @@ public class Question {
 
     @Column(name = "required")
     private Boolean required;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 
     @OneToOne
     @JoinColumn(name = "required_question")
