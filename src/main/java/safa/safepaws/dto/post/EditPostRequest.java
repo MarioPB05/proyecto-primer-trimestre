@@ -12,7 +12,7 @@ import safa.safepaws.model.Address;
 public class EditPostRequest {
     private String name;
     private String description;
-    private String photo; // TODO implementar cloudinary (cambiar a multipartFile)
+    private MultipartFile photo;
     private Integer typeId;
     private Address address;
 }

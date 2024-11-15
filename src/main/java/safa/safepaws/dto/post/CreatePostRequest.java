@@ -14,7 +14,7 @@ public class CreatePostRequest {
     private Client client;
     private String name;
     private String description;
-    private String photo; // TODO implementar cloudinary (cambiar a multipartFile)
+    private MultipartFile photo;
     private Integer typeId;
     private Address address;
 }
