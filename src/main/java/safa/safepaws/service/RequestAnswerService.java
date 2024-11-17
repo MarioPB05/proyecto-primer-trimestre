@@ -31,7 +31,7 @@ public class RequestAnswerService {
      */
     public RequestAnswer createRequestAnswer(CreateRequestAnswerRequest createRequestAnswerRequestDTO, Request request){
         RequestAnswer requestAnswer = new RequestAnswer();
-        Question question = questionRepository.findQuestionById(createRequestAnswerRequestDTO.getQuestionId()).orElse(null);
+        Question question = questionRepository.findById(createRequestAnswerRequestDTO.getQuestionId()).orElse(null);
 
         if (question == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

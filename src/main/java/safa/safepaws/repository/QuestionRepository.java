@@ -17,6 +17,4 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
     Optional<Question> findById(Integer questionId);
   
-    Optional<Question> findQuestionById(Integer id);
-  
 }
