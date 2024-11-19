@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.EditPostRequest;
+import safa.safepaws.dto.post.GetPostResponse;
 import safa.safepaws.enums.PostStatus;
 import safa.safepaws.mapper.PostMapper;
 import safa.safepaws.model.Post;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.PostRepository;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -113,6 +116,23 @@ public class PostService {
         }
 
         return post;
+    }
+
+    /**
+     * Get all posts
+     *
+     * @return List<Post>
+     */
+    public List<GetPostResponse> getPosts(String filter) {
+        if (Objects.equals(filter, "") || filter == null){
+            return postMapper.toDTO(postRepository.findAvailableAdoptions());
+        }
+
+        List<Integer> filters = Arrays.stream(filter.split(","))
+                .map(Integer::parseInt)
+                .toList();
+
+        return postMapper.toDTO(postRepository.findPendingPostsByTypes(filters));
     }
 
 }
