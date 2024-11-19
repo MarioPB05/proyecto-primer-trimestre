@@ -11,12 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.EditPostRequest;
+import safa.safepaws.dto.post.GetPostResponse;
 import safa.safepaws.enums.AnimalType;
+import safa.safepaws.enums.PostStatus;
 import safa.safepaws.model.Post;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Mapper
@@ -32,6 +35,23 @@ public abstract class PostMapper {
     @Mapping(target = "type", source = "typeId", qualifiedByName = "toAnimalType")
     @Mapping(target = "photo", source = "photo", qualifiedByName = "uploadImageOnEdit")
     public abstract Post toEntity(EditPostRequest editPostRequest);
+
+    @Mapping(target = "addressVillage", source = "address.village")
+    @Mapping(target = "typeId", source = "type", qualifiedByName = "mapAnimalType")
+    @Mapping(target = "statusId", source = "status", qualifiedByName = "mapPostStatus")
+    @Mapping(target = "description", source = "description")
+    public abstract GetPostResponse toDTO(Post post);
+    public abstract List<GetPostResponse> toDTO(List<Post> postList);
+
+    @Named("mapAnimalType")
+    public Integer mapAnimalType(AnimalType animalType) {
+        return animalType != null ? animalType.ordinal() : null;
+    }
+
+    @Named("mapPostStatus")
+    public Integer mapPostStatus(PostStatus postStatus) {
+        return postStatus != null ? postStatus.ordinal() : null;
+    }
 
     @Named("toAnimalType")
     public AnimalType toAnimalType(Integer typeId){

@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum AnimalType {
-    PERRO (1),
-    GATO (2);
+    PERRO (0),
+    GATO (1);
     private final int id;
 
     @JsonValue
