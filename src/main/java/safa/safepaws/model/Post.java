@@ -36,11 +36,11 @@ public class Post {
     private String photo;
 
     @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private PostStatus status;
 
     @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private AnimalType type;
 
     @Column(name = "urgent", nullable = false)
