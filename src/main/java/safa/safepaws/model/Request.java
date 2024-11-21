@@ -27,7 +27,7 @@ public class Request {
     private Timestamp creationDate;
 
     @Column(name="status")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private RequestStatus status;
 
     @Column(name = "deleted")
