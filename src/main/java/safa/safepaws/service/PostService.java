@@ -7,15 +7,14 @@ import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.EditPostRequest;
 import safa.safepaws.dto.post.GetPostResponse;
+import safa.safepaws.enums.AnimalType;
 import safa.safepaws.enums.PostStatus;
 import safa.safepaws.mapper.PostMapper;
 import safa.safepaws.model.Post;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.PostRepository;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -133,6 +132,17 @@ public class PostService {
                 .toList();
 
         return postMapper.toDTO(postRepository.findPendingPostsByTypes(filters));
+    }
+
+    public Map<String, Integer> getAnimalTypes() {
+        Map<String, Integer> response = new HashMap<>();
+
+        for(AnimalType animalType : AnimalType.values()){
+            String key = animalType.name().toLowerCase().substring(0, 1).toUpperCase() + animalType.name().substring(1).toLowerCase();
+            response.put(key, animalType.getId());
+        }
+
+        return response;
     }
 
 }
