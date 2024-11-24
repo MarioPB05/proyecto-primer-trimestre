@@ -10,6 +10,7 @@ import safa.safepaws.dto.post.GetPostResponse;
 import safa.safepaws.service.PostService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/adoptions")
@@ -21,5 +22,10 @@ public class PostController {
     @GetMapping("/")
     public ResponseEntity<List<GetPostResponse>> getPosts(@RequestParam(required = false) String filter){
         return ResponseEntity.ok(postService.getPosts(filter));
+    }
+
+    @GetMapping("/animalTypes")
+    public ResponseEntity<Map<String, Integer>> getAnimalTypes(){
+        return ResponseEntity.ok(postService.getAnimalTypes());
     }
 }
