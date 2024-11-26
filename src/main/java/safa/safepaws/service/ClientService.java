@@ -11,8 +11,6 @@ import safa.safepaws.model.Client;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.ClientRepository;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -25,20 +23,31 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    private boolean isNotEmptyField(String field) {
+        return field != null && !field.isEmpty();
+    }
 
-    public Client modifyClient(EditClientRequest editClientRequest) {
-
+    public void modifyClient(EditClientRequest editClientRequest) {
         Client client = clientRepository.findById(authenticatedUser.getClient().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Client not found"));
 
-        client.setName(editClientRequest.getName());
-        client.setSurname(editClientRequest.getSurname());
-        client.setBirthdate(editClientRequest.getBirthdate());
-        client.setDni(editClientRequest.getDni());
-        client.setAddress(editClientRequest.getAddress());
-        client.setPhoto(String.valueOf(editClientRequest.getPhoto()));
-        return clientRepository.save(client);
+        if (isNotEmptyField(editClientRequest.getName())) {
+            client.setName(editClientRequest.getName());
+        }
 
+        if (isNotEmptyField(editClientRequest.getSurname())) {
+            client.setSurname(editClientRequest.getSurname());
+        }
+
+        if (isNotEmptyField(editClientRequest.getDni())) {
+            client.setDni(editClientRequest.getDni());
+        }
+
+        if (isNotEmptyField(editClientRequest.getPhoto())) {
+            client.setPhoto(editClientRequest.getPhoto());
+        }
+
+        clientRepository.save(client);
     }
 
 
