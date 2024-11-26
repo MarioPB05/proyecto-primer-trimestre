@@ -1,0 +1,21 @@
+package safa.safepaws.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class GetAdoptionsResponse {
+    private Integer requestId;
+    private Date requestDate;
+    private Integer requestStatus;
+    private String ownerName;
+    private String applierName;
+    private String postName;
+    private String postPhoto;
+    private String addressVillage;
+    private Boolean deleted;
+}
