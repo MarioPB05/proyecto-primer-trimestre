@@ -12,7 +12,7 @@ public class GetPostResponse {
     private String name;
     private String photo;
     private String description;
-    private Integer statusId;
+    private Integer status;
     private Integer typeId;
     private Boolean deleted;
     private String addressVillage;

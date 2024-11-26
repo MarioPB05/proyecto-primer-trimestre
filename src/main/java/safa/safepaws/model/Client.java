@@ -38,4 +38,7 @@ public class Client {
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @Column(name="photo", nullable = false)
+    private String photo;
 }

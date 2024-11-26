@@ -11,6 +11,8 @@ import safa.safepaws.model.Client;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.ClientRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -25,18 +27,18 @@ public class ClientService {
 
 
     public Client modifyClient(EditClientRequest editClientRequest) {
-        if (authenticatedUser.getClient().getId().equals(authenticatedUser.getClient().getId())) {
-            Client client = clientRepository.findById(editClientRequest.getId())
-                    .orElseThrow(() -> new RuntimeException("Client not found"));
-            client.setName(editClientRequest.getName());
-            client.setSurname(editClientRequest.getSurname());
-            client.setBirthdate(editClientRequest.getBirthdate());
-            client.setDni(editClientRequest.getDni());
-            client.setAddress(editClientRequest.getAddress());
-            return clientRepository.save(client);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You are not authorized to modify this client");
-        }
+
+        Client client = clientRepository.findById(authenticatedUser.getClient().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Client not found"));
+
+        client.setName(editClientRequest.getName());
+        client.setSurname(editClientRequest.getSurname());
+        client.setBirthdate(editClientRequest.getBirthdate());
+        client.setDni(editClientRequest.getDni());
+        client.setAddress(editClientRequest.getAddress());
+        client.setPhoto(String.valueOf(editClientRequest.getPhoto()));
+        return clientRepository.save(client);
+
     }
 
 
