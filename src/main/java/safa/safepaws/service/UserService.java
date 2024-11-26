@@ -7,7 +7,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,33 +17,28 @@ import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.authentication.AuthenticationRequest;
 import safa.safepaws.dto.authentication.AuthenticationResponse;
 import safa.safepaws.dto.authentication.VerifyAuthResponse;
-import safa.safepaws.dto.client.EditClientRequest;
 import safa.safepaws.dto.user.CreateUserRequest;
 import safa.safepaws.dto.user.EditUserRequest;
 import safa.safepaws.dto.user.GetUserResponse;
 import safa.safepaws.enums.Role;
 import safa.safepaws.mapper.UserMapper;
-import safa.safepaws.model.Client;
 import safa.safepaws.model.User;
-import safa.safepaws.repository.ClientRepository;
 import safa.safepaws.repository.UserRepository;
 import safa.safepaws.security.JwtService;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final User authenticatedUser;
-    private final ClientRepository clientRepository;
     private final UserMapper userMapper;
+    private final ClientService clientService;
 
 
     private boolean checkIfUserExists(String username) {
@@ -125,39 +119,32 @@ public class UserService {
         }
     }
 
-
-    public User editUser(EditUserRequest dto) throws Exception {
-        Integer userid = authenticatedUser.getClient().getId();
-        User user = userRepository.findById(userid).orElseThrow(() -> new Exception("Usuario no encontrado"));
-
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-
-
-        EditClientRequest editClientRequest = dto.getClient();
-        Client client = user.getClient();
-        if (editClientRequest != null) {
-            client.setName(editClientRequest.getName());
-            client.setSurname(editClientRequest.getSurname());
-            client.setDni(editClientRequest.getDni());
-            client.setPhoto(editClientRequest.getPhoto());
-        }
-
-        userRepository.save(user);
-        clientRepository.save(client);
-
-        return user;
+    private boolean isNotEmptyField(String field) {
+        return field != null && !field.isEmpty();
     }
 
+    public GetUserResponse editUser(EditUserRequest dto) throws Exception {
+        Integer userid = authenticatedUser.getClient().getId();
+        User user = userRepository.findById(userid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        if (isNotEmptyField(dto.getUsername())) user.setUsername(dto.getUsername());
+        if (isNotEmptyField(dto.getEmail())) user.setEmail(dto.getEmail());
+
+        userRepository.save(user);
+
+        clientService.modifyClient(dto.getClient());
+
+        return userMapper.toDTO(user);
+    }
 
     public GetUserResponse getUserData() {
         try {
             Integer userId = authenticatedUser.getClient().getId();
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
             return userMapper.toDTO(user);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener usuario", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting user data");
         }
     }
 }
