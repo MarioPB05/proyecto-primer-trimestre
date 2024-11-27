@@ -19,8 +19,4 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public Address createAddress(Address address) {
-        return addressRepository.save(address);
-    }
-
 }
