@@ -23,20 +23,31 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    private boolean isNotEmptyField(String field) {
+        return field != null && !field.isEmpty();
+    }
 
-    public Client modifyClient(EditClientRequest editClientRequest) {
-        if (authenticatedUser.getClient().getId().equals(authenticatedUser.getClient().getId())) {
-            Client client = clientRepository.findById(editClientRequest.getId())
-                    .orElseThrow(() -> new RuntimeException("Client not found"));
+    public void modifyClient(EditClientRequest editClientRequest) {
+        Client client = clientRepository.findById(authenticatedUser.getClient().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Client not found"));
+
+        if (isNotEmptyField(editClientRequest.getName())) {
             client.setName(editClientRequest.getName());
-            client.setSurname(editClientRequest.getSurname());
-            client.setBirthdate(editClientRequest.getBirthdate());
-            client.setDni(editClientRequest.getDni());
-            client.setAddress(editClientRequest.getAddress());
-            return clientRepository.save(client);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You are not authorized to modify this client");
         }
+
+        if (isNotEmptyField(editClientRequest.getSurname())) {
+            client.setSurname(editClientRequest.getSurname());
+        }
+
+        if (isNotEmptyField(editClientRequest.getDni())) {
+            client.setDni(editClientRequest.getDni());
+        }
+
+        if (isNotEmptyField(editClientRequest.getPhoto())) {
+            client.setPhoto(editClientRequest.getPhoto());
+        }
+
+        clientRepository.save(client);
     }
 
 

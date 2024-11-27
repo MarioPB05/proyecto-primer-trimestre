@@ -2,6 +2,7 @@ package safa.safepaws.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.post.CreatePostRequest;
@@ -143,6 +144,10 @@ public class PostService {
         }
 
         return response;
+    }
+
+    public List<GetPostResponse> getUserPost(){
+        return postMapper.toDTO(postRepository.findAllByClientIdAndDeletedFalseOrderByStatus(authenticatedUser.getClient().getId()));
     }
 
 }

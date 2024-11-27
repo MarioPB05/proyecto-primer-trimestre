@@ -38,7 +38,7 @@ public abstract class PostMapper {
 
     @Mapping(target = "addressVillage", source = "address.village")
     @Mapping(target = "typeId", source = "type", qualifiedByName = "mapAnimalType")
-    @Mapping(target = "statusId", source = "status", qualifiedByName = "mapPostStatus")
+    @Mapping(target = "status", source = "status", qualifiedByName = "mapPostStatus")
     @Mapping(target = "description", source = "description")
     public abstract GetPostResponse toDTO(Post post);
     public abstract List<GetPostResponse> toDTO(List<Post> postList);

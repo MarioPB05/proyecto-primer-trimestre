@@ -18,4 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query("SELECT p FROM Post p WHERE p.deleted = false AND p.status = 0 AND p.type IN :types")
     List<Post> findPendingPostsByTypes(@Param("types") List<Integer> types);
+
+
+    List<Post> findAllByClientIdAndDeletedFalseOrderByStatus(Integer clientId);
 }
