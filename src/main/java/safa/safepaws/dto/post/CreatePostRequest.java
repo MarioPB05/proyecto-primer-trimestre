@@ -3,9 +3,7 @@ package safa.safepaws.dto.post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-import safa.safepaws.model.Address;
-import safa.safepaws.model.Client;
+import safa.safepaws.dto.address.CreateAddressRequest;
 
 @Data
 @AllArgsConstructor
@@ -15,5 +13,5 @@ public class CreatePostRequest {
     private String description;
     private String photo;
     private Integer typeId;
-    private Address address;
+    private CreateAddressRequest address;
 }
