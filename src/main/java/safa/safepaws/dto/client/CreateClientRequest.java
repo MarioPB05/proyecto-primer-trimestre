@@ -15,4 +15,5 @@ public class CreateClientRequest {
     private String birthdate;
     private String registrationDate;
     private Address address;
+    private String photo;
 }
