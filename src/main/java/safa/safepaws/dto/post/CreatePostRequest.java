@@ -11,10 +11,9 @@ import safa.safepaws.model.Client;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatePostRequest {
-    private Client client;
     private String name;
     private String description;
-    private MultipartFile photo;
+    private String photo;
     private Integer typeId;
     private Address address;
 }
