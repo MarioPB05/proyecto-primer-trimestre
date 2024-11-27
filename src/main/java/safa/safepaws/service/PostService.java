@@ -2,8 +2,8 @@ package safa.safepaws.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.EditPostRequest;
@@ -15,6 +15,7 @@ import safa.safepaws.model.Post;
 import safa.safepaws.model.User;
 import safa.safepaws.repository.PostRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -23,6 +24,8 @@ public class PostService {
     private final PostRepository postRepository;
     private PostMapper postMapper;
     private final User authenticatedUser;
+    private final CloudinaryService cloudinaryService;
+    private final AddressService addressService;
 
     /**
      * Find a post by id
@@ -54,11 +57,27 @@ public class PostService {
      * Create a new post
      *
      * @param createPostRequest PostCreateDTO
-     * @return Post
+     * @return Integer Post id
      */
-    public Post createPost(CreatePostRequest createPostRequest){
+    public Integer createPost(CreatePostRequest createPostRequest, MultipartFile file){
+        if (file == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image is required");
+        }
+
+        createPostRequest.setPhoto(cloudinaryService.uploadImage(file));
+
         Post post = postMapper.toEntity(createPostRequest);
-        return postRepository.save(post);
+
+        post.setUrgent(false);
+        post.setDeleted(false);
+        post.setStatus(PostStatus.PENDING);
+        post.setCreationDate(LocalDate.now());
+
+        post.setClient(authenticatedUser.getClient());
+
+        post.setAddress(addressService.createAddress(createPostRequest.getAddress()));
+
+        return postRepository.save(post).getId();
     }
 
     /**

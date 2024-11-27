@@ -18,6 +18,7 @@ public class RegisterRequest {
     private String surname;
     private String dni;
     private String birthdate;
+    private String photo;
 
     private Float coordinateX;
     private Float coordinateY;

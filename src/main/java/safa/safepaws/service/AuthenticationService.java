@@ -42,7 +42,8 @@ public class AuthenticationService {
                 registerRequest.getDni(),
                 registerRequest.getBirthdate(),
                 null,
-                address
+                address,
+                registerRequest.getPhoto() // TODO: Implementar cloudinary
         );
 
         Client client = clientService.createClient(createClientRequest);

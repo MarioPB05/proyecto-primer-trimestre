@@ -3,14 +3,10 @@ package safa.safepaws.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.GetPostResponse;
-import safa.safepaws.model.Post;
-import safa.safepaws.model.User;
-import safa.safepaws.repository.PostRepository;
 import safa.safepaws.service.PostService;
 
 import java.util.List;
@@ -22,9 +18,6 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
-    private final PostRepository postRepository;
-    private final User authenticatedUser;
-
 
     @GetMapping("/")
     public ResponseEntity<List<GetPostResponse>> getPosts(@RequestParam(required = false) String filter){
@@ -44,5 +37,11 @@ public class PostController {
     @GetMapping("/animalTypes")
     public ResponseEntity<Map<String, Integer>> getAnimalTypes(){
         return ResponseEntity.ok(postService.getAnimalTypes());
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<Integer> createPost(@RequestPart("dto")CreatePostRequest createPostRequest,
+                                              @RequestPart(value="file", required = false) MultipartFile file){
+        return ResponseEntity.ok(postService.createPost(createPostRequest, file));
     }
 }
