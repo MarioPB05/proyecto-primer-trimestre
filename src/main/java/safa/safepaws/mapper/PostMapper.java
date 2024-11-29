@@ -6,6 +6,7 @@ import org.mapstruct.Named;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.EditPostRequest;
 import safa.safepaws.dto.post.GetPostResponse;
+import safa.safepaws.dto.post.MapPostResponse;
 import safa.safepaws.enums.AnimalType;
 import safa.safepaws.enums.PostStatus;
 import safa.safepaws.model.Address;
@@ -28,6 +29,12 @@ public abstract class PostMapper {
     @Mapping(target = "description", source = "description")
     public abstract GetPostResponse toDTO(Post post);
     public abstract List<GetPostResponse> toDTO(List<Post> postList);
+
+    @Mapping(target = "latitude", source = "address.coordinateY")
+    @Mapping(target = "longitude", source = "address.coordinateX")
+    @Mapping(target = "postId", source = "id")
+    public abstract MapPostResponse toMapDTO(Post post);
+    public abstract List<MapPostResponse> toMapDTO(List<Post> postList);
 
     @Named("mapAnimalType")
     public Integer mapAnimalType(AnimalType animalType) {
