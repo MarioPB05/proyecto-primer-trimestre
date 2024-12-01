@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import safa.safepaws.dto.post.CreatePostRequest;
-import safa.safepaws.dto.post.EditPostRequest;
-import safa.safepaws.dto.post.GetPostResponse;
+import safa.safepaws.dto.post.*;
 import safa.safepaws.enums.AnimalType;
 import safa.safepaws.enums.PostStatus;
 import safa.safepaws.mapper.PostMapper;
@@ -51,6 +49,16 @@ public class PostService {
      */
     private Boolean checkOwner(Post post){
         return Objects.equals(post.getClient().getId(), authenticatedUser.getClient().getId());
+    }
+
+    /**
+     * Get a post
+     *
+     * @param postId Integer
+     * @return GetPostResponse
+     */
+    public GetPostResponse getPost(Integer postId) {
+        return postMapper.toDTO(findPost(postId));
     }
 
     /**
@@ -167,6 +175,15 @@ public class PostService {
 
     public List<GetPostResponse> getUserPost(){
         return postMapper.toDTO(postRepository.findAllByClientIdAndDeletedFalseOrderByStatus(authenticatedUser.getClient().getId()));
+    }
+
+    public List<MapPostResponse> getMapPosts(MapPostRequest mapPostRequest) {
+        return postMapper.toMapDTO(postRepository.findWithinBounds(
+            mapPostRequest.getSouthWest().getLatitude(),
+            mapPostRequest.getSouthWest().getLongitude(),
+            mapPostRequest.getNorthEast().getLatitude(),
+            mapPostRequest.getNorthEast().getLongitude()
+        ));
     }
 
 }

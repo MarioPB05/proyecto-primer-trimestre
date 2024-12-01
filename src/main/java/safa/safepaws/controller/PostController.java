@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import safa.safepaws.dto.post.CreatePostRequest;
 import safa.safepaws.dto.post.GetPostResponse;
+import safa.safepaws.dto.post.MapPostRequest;
+import safa.safepaws.dto.post.MapPostResponse;
 import safa.safepaws.service.PostService;
 
 import java.util.List;
@@ -22,6 +24,11 @@ public class PostController {
     @GetMapping("/")
     public ResponseEntity<List<GetPostResponse>> getPosts(@RequestParam(required = false) String filter){
         return ResponseEntity.ok(postService.getPosts(filter));
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostResponse> getPost(@PathVariable Integer postId){
+        return ResponseEntity.ok(postService.getPost(postId));
     }
 
     @GetMapping("/user")
@@ -43,5 +50,10 @@ public class PostController {
     public ResponseEntity<Integer> createPost(@RequestPart("dto")CreatePostRequest createPostRequest,
                                               @RequestPart(value="file", required = false) MultipartFile file){
         return ResponseEntity.ok(postService.createPost(createPostRequest, file));
+    }
+
+    @PostMapping("/map")
+    public ResponseEntity<List<MapPostResponse>> getMapPosts(@RequestBody MapPostRequest mapPostRequest){
+        return ResponseEntity.ok(postService.getMapPosts(mapPostRequest));
     }
 }

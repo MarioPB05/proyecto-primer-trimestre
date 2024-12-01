@@ -19,6 +19,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.deleted = false AND p.status = 0 AND p.type IN :types")
     List<Post> findPendingPostsByTypes(@Param("types") List<Integer> types);
 
-
     List<Post> findAllByClientIdAndDeletedFalseOrderByStatus(Integer clientId);
+
+    @Query("SELECT p FROM Post p WHERE p.deleted = false AND p.status = 0 " +
+            "AND p.address.coordinateY BETWEEN :southLat AND :northLat " +
+            "AND p.address.coordinateX BETWEEN :southLng AND :northLng")
+    List<Post> findWithinBounds(@Param("southLat") Double southLat, @Param("southLng") Double southLng,
+                                @Param("northLat") Double northLat, @Param("northLng") Double northLng);
 }
