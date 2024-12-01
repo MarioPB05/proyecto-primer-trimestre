@@ -52,6 +52,16 @@ public class PostService {
     }
 
     /**
+     * Get a post
+     *
+     * @param postId Integer
+     * @return GetPostResponse
+     */
+    public GetPostResponse getPost(Integer postId) {
+        return postMapper.toDTO(findPost(postId));
+    }
+
+    /**
      * Create a new post
      *
      * @param createPostRequest PostCreateDTO
