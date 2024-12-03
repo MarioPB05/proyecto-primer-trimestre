@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import safa.safepaws.dto.authentication.AuthenticationRequest;
 import safa.safepaws.dto.authentication.AuthenticationResponse;
 import safa.safepaws.dto.authentication.RegisterRequest;
@@ -26,8 +27,9 @@ public class AuthenticationController {
 
     @Transactional
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authenticationService.register(registerRequest));
+    public ResponseEntity<AuthenticationResponse> register(@RequestPart("dto") RegisterRequest registerRequest,
+                                                           @RequestPart(value = "file", required = false) MultipartFile file) {
+        return ResponseEntity.ok(authenticationService.register(registerRequest, file));
     }
 
     @PostMapping("/authenticate")
