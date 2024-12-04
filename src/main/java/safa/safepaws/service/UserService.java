@@ -139,7 +139,7 @@ public class UserService {
 
     public GetUserResponse getUserData() {
         try {
-            Integer userId = authenticatedUser.getClient().getId();
+            Integer userId = authenticatedUser.getId();
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
             return userMapper.toDTO(user);
