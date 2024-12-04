@@ -23,6 +23,8 @@ public class UserController {
         try {
             if (file != null) {
                 editUserRequest.getClient().setPhoto(cloudinaryService.uploadImage(file));
+            }else {
+                editUserRequest.getClient().setPhoto(null);
             }
 
             return ResponseEntity.ok(userService.editUser(editUserRequest));

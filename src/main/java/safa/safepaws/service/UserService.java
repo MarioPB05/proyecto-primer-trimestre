@@ -123,8 +123,8 @@ public class UserService {
         return field != null && !field.isEmpty();
     }
 
-    public GetUserResponse editUser(EditUserRequest dto) throws Exception {
-        Integer userid = authenticatedUser.getClient().getId();
+    public GetUserResponse editUser(EditUserRequest dto) {
+        Integer userid = authenticatedUser.getId();
         User user = userRepository.findById(userid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (isNotEmptyField(dto.getUsername())) user.setUsername(dto.getUsername());
