@@ -1,8 +1,8 @@
 ![Safe Paws Logo](/src/main/resources/Banner%20SP%20Back.png)
 
-# Safe Paws (Frontend)
+# Safe Paws (Backend)
 
-¡Bienvenido a Safe Paws! 🐾
+¡Bienvenido al backend de Safe Paws! 🐾
 
 SafePaws es una aplicación web que te permite encontrar a tu nuevo mejor amigo. En SafePaws podrás encontrar perros en adopción, conocer sus características y solicitar su adopción.
 
@@ -59,7 +59,7 @@ mvn spring-boot:run
 - **Model**: Clases que representan las entidades de la base de datos.
 - **DTO**: Clases que representan los objetos de transferencia de datos.
 
---
+---
 
 ## Autores
 - [@marioperdiguero](https://github.com/marioperdiguero)
