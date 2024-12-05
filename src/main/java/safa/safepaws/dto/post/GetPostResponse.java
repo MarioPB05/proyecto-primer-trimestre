@@ -16,4 +16,6 @@ public class GetPostResponse {
     private Integer typeId;
     private Boolean deleted;
     private String addressVillage;
+    private Float coordinateX;
+    private Float coordinateY;
 }
