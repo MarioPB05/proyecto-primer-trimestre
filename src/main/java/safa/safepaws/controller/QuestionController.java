@@ -15,7 +15,7 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("getQuestions")
+    @GetMapping("/")
     public List<QuestionResponse> getQuestions(){
         return questionService.findUndeletedQuestion();
     }
