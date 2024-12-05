@@ -22,7 +22,7 @@ public class Question {
     private String question;
 
     @Column(name = "type")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private QuestionType type;
 
     @Column(name = "required")
@@ -30,6 +30,9 @@ public class Question {
 
     @Column(name = "deleted")
     private Boolean deleted;
+
+    @Column(name = "placeholder")
+    private String placeholder;
 
     @OneToOne
     @JoinColumn(name = "required_question")
