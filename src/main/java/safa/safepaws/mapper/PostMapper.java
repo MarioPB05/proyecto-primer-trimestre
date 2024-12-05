@@ -27,6 +27,8 @@ public abstract class PostMapper {
     @Mapping(target = "typeId", source = "type", qualifiedByName = "mapAnimalType")
     @Mapping(target = "status", source = "status", qualifiedByName = "mapPostStatus")
     @Mapping(target = "description", source = "description")
+    @Mapping(target = "coordinateX", source = "address.coordinateX")
+    @Mapping(target = "coordinateY", source = "address.coordinateY")
     public abstract GetPostResponse toDTO(Post post);
     public abstract List<GetPostResponse> toDTO(List<Post> postList);
 
