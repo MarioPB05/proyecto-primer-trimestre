@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import safa.safepaws.enums.RequestStatus;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="request", schema = "public", catalog = "safe_paws")
@@ -24,7 +24,7 @@ public class Request {
     private String message;
 
     @Column(name="creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name="status")
     @Enumerated(EnumType.ORDINAL)

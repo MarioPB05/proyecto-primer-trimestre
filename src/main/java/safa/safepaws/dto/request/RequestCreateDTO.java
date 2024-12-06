@@ -1,14 +1,13 @@
 package safa.safepaws.dto.request;
 
 import lombok.Data;
+import safa.safepaws.dto.requestAnswer.CreateRequestAnswerRequest;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class RequestCreateDTO {
-
     private String message;
-    private LocalDate creationDate;
-    private Integer status;
     private Integer postId;
+    private List<CreateRequestAnswerRequest> answers;
 }

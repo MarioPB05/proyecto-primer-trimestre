@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final QuestionMapper questionMapper = QuestionMapper.INSTANCE;
+    private final QuestionMapper questionMapper;
 
     public Question createQuestion(QuestionCreateRequest questionCreateRequest) {
         Question question = questionMapper.toEntity(questionCreateRequest);
@@ -35,10 +35,9 @@ public class QuestionService {
         List<Question> questions = questionRepository.findUndeletedQuestion();
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question question : questions) {
-            QuestionResponse questionResponse = new QuestionResponse();
+            questionResponses.add(questionMapper.toResponse(question));
         }
         return questionResponses;
-
     }
 
 }

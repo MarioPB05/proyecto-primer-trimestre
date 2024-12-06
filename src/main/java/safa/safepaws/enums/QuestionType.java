@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum QuestionType {
-    INPUT (1),
-    TEXTAREA (2),
-    CHECKBOX (3);
+    INPUT (0),
+    TEXTAREA (1),
+    CHECKBOX (2),
+    SWITCH (3);
     private final int id;
 
     @JsonValue

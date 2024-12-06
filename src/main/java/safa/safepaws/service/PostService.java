@@ -31,7 +31,7 @@ public class PostService {
      * @param postId Integer
      * @return Post
      */
-    private Post findPost(Integer postId){
+    public Post findPost(Integer postId){
         Post post = postRepository.findTopById(postId).orElse(null);
 
         if (post == null){
