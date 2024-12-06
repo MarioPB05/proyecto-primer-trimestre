@@ -1,5 +1,6 @@
 package safa.safepaws.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class RequestAnswerService {
      * @param request Request
      * @return RequestAnswer
      */
+    @Transactional
     public RequestAnswer createRequestAnswer(CreateRequestAnswerRequest createRequestAnswerRequestDTO, Request request){
         RequestAnswer requestAnswer = new RequestAnswer();
         Question question = questionRepository.findById(createRequestAnswerRequestDTO.getQuestionId()).orElse(null);
@@ -40,6 +42,8 @@ public class RequestAnswerService {
         requestAnswer.setAnswer(createRequestAnswerRequestDTO.getAnswer());
         requestAnswer.setRequest(request);
         requestAnswer.setQuestion(question);
+
+        requestAnswerRepository.save(requestAnswer);
 
         return requestAnswer;
     }
