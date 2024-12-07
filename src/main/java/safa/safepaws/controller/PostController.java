@@ -5,11 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import safa.safepaws.dto.post.CreatePostRequest;
-import safa.safepaws.dto.post.GetPostResponse;
-import safa.safepaws.dto.post.MapPostRequest;
-import safa.safepaws.dto.post.MapPostResponse;
+import safa.safepaws.dto.post.*;
 import safa.safepaws.service.PostService;
+import safa.safepaws.service.RequestService;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +18,7 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
+    private final RequestService requestService;
 
     @GetMapping("/")
     public ResponseEntity<List<GetPostResponse>> getPosts(@RequestParam(required = false) String filter){
@@ -29,6 +28,11 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<GetPostResponse> getPost(@PathVariable Integer postId){
         return ResponseEntity.ok(postService.getPost(postId));
+    }
+
+    @GetMapping("{postId}/check-request")
+    public ResponseEntity<CheckPostResponse> checkRequest(@PathVariable Integer postId){
+        return ResponseEntity.ok(requestService.checkRequest(postId));
     }
 
     @GetMapping("/user")

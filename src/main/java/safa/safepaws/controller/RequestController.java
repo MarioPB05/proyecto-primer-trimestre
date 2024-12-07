@@ -1,5 +1,6 @@
 package safa.safepaws.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,13 @@ public class RequestController {
 
     @Transactional
     @PostMapping("/add")
-    public ResponseEntity<Integer> createRequest(@RequestBody RequestCreateDTO requestCreateDTO){
+    public ResponseEntity<String> createRequest(@RequestBody RequestCreateDTO requestCreateDTO){
         return ResponseEntity.ok(requestService.createRequest(requestCreateDTO));
+    }
+
+    @GetMapping("/{requestCode}/pdf")
+    @ResponseBody
+    public void generateRequestPdf(@PathVariable String requestCode, HttpServletResponse response) throws Exception {
+        requestService.generateRequestPdf(requestCode, response);
     }
 }
