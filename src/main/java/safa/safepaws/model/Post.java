@@ -55,4 +55,8 @@ public class Post {
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @Column(name = "code", nullable = false)
+    private String code;
+
 }

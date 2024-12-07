@@ -40,4 +40,7 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Column(name = "code")
+    private String code;
 }
