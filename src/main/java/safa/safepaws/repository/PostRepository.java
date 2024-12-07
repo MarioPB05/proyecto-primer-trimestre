@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Integer> {
     Optional<Post> findTopById(Integer integer);
 
-    @Query("select p from Post p where p.deleted = false and p.status = 0")
-    List<Post> findAvailableAdoptions();
+    @Query("select p from Post p where p.deleted = false and p.status = 0 and p.client.id != :clientId")
+    List<Post> findAvailableAdoptions(@Param("clientId") Integer clientId);
 
     @Query("SELECT p FROM Post p WHERE p.deleted = false AND p.status = 0 AND p.type IN :types")
     List<Post> findPendingPostsByTypes(@Param("types") List<Integer> types);
