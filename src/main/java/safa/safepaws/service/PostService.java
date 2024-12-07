@@ -1,5 +1,6 @@
 package safa.safepaws.service;
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,7 @@ public class PostService {
         post.setDeleted(false);
         post.setStatus(PostStatus.PENDING);
         post.setCreationDate(LocalDate.now());
+        post.setCode(NanoIdUtils.randomNanoId(NanoIdUtils.DEFAULT_NUMBER_GENERATOR, NanoIdUtils.DEFAULT_ALPHABET, 10).toUpperCase());
 
         post.setClient(authenticatedUser.getClient());
 
@@ -152,7 +154,7 @@ public class PostService {
      */
     public List<GetPostResponse> getPosts(String filter) {
         if (Objects.equals(filter, "") || filter == null){
-            return postMapper.toDTO(postRepository.findAvailableAdoptions());
+            return postMapper.toDTO(postRepository.findAvailableAdoptions(authenticatedUser.getClient().getId()));
         }
 
         List<Integer> filters = Arrays.stream(filter.split(","))
