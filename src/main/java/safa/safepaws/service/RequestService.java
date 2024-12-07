@@ -52,7 +52,7 @@ public class RequestService {
     }
 
     @Transactional
-    public Integer createRequest(RequestCreateDTO requestCreateDTO){
+    public String createRequest(RequestCreateDTO requestCreateDTO){
         Request request = new Request();
         Post post = postService.findPost(requestCreateDTO.getPostId());
 
@@ -62,6 +62,7 @@ public class RequestService {
         request.setDeleted(false);
         request.setClient(authenticatedUser.getClient());
         request.setPost(post);
+        request.setCode(NanoIdUtils.randomNanoId(NanoIdUtils.DEFAULT_NUMBER_GENERATOR, NanoIdUtils.DEFAULT_ALPHABET, 10).toUpperCase());
 
         request = requestRepository.save(request);
 
@@ -69,6 +70,6 @@ public class RequestService {
             requestAnswerService.createRequestAnswer(requestAnswer, request);
         }
 
-        return request.getId();
+        return request.getCode();
     }
 }
