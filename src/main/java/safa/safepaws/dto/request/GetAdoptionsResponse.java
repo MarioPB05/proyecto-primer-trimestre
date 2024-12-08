@@ -12,6 +12,8 @@ public class GetAdoptionsResponse {
     private Integer requestId;
     private Date requestDate;
     private Integer requestStatus;
+    private String requestCode;
+    private String chatRoomCode;
     private String ownerName;
     private String applierName;
     private String postName;
