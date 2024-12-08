@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import safa.safepaws.dto.request.GetAdoptionsResponse;
 import safa.safepaws.dto.request.RequestCreateDTO;
+import safa.safepaws.dto.request.RequestStatusResponse;
 import safa.safepaws.service.RequestService;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class RequestController {
     @ResponseBody
     public void generateRequestPdf(@PathVariable String requestCode, HttpServletResponse response) throws Exception {
         requestService.generateRequestPdf(requestCode, response);
+    }
+
+    @GetMapping("/{requestCode}/status")
+    public ResponseEntity<RequestStatusResponse> getRequestStatus(@PathVariable String requestCode){
+        return ResponseEntity.ok(requestService.getRequestStatus(requestCode));
     }
 }

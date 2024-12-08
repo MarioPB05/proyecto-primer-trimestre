@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import safa.safepaws.dto.post.CheckPostResponse;
 import safa.safepaws.dto.request.GetAdoptionsResponse;
 import safa.safepaws.dto.request.RequestCreateDTO;
+import safa.safepaws.dto.request.RequestStatusResponse;
 import safa.safepaws.dto.requestAnswer.CreateRequestAnswerRequest;
 import safa.safepaws.enums.RequestStatus;
 import safa.safepaws.mapper.RequestMapper;
@@ -96,10 +97,10 @@ public class RequestService {
 
         Context context = new Context();
 
-        LocalDate currentDate = LocalDate.now();
-        String month = currentDate.getMonth().getDisplayName(TextStyle.FULL, new Locale("es","ES"));
+        LocalDate requestDate = request.getCreationDate().toLocalDate();
+        String month = requestDate.getMonth().getDisplayName(TextStyle.FULL, new Locale("es","ES"));
         month = month.substring(0, 1).toUpperCase() + month.substring(1);
-        String formattedDate = month + " " + currentDate.getDayOfMonth() + ", " + currentDate.getYear();
+        String formattedDate = month + " " + requestDate.getDayOfMonth() + ", " + requestDate.getYear();
 
         context.setVariable("date", formattedDate);
 
@@ -126,5 +127,15 @@ public class RequestService {
         }
 
         return new CheckPostResponse(request == null, code);
+    }
+
+    public RequestStatusResponse getRequestStatus(String requestCode) {
+        Request request = requestRepository.findByCode(requestCode).orElse(null);
+
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
+        }
+
+        return new RequestStatusResponse(request.getStatus().getId());
     }
 }
