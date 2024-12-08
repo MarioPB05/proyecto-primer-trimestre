@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 public enum RequestStatus {
     PENDING(0),
     REJECTED(1),
-    ACCEPTED(2);
+    ACCEPTED(2),
+    ADOPTED(3), // Estado que se le asigna a la solicitud cuando el post ha sido adoptado por otra request
+    PENDING_SIGNATURE(4), // Esperando que el adoptante firme el contrato
+    FINISHED(5); // Estado que se le asigna a la solicitud cuando el adoptante firma el contrato
     private final int id;
 
     @JsonValue
