@@ -39,6 +39,7 @@ public class RequestService {
     private final PostService postService;
     private final RequestAnswerService requestAnswerService;
     private final PdfService pdfService;
+    private final ChatRoomService chatRoomService;
 
     public String delete (Integer id){
         Request request = requestRepository.findById(id).orElse(null);
@@ -137,5 +138,26 @@ public class RequestService {
         }
 
         return new RequestStatusResponse(request.getStatus().getId());
+    }
+
+    public String acceptRequest(String requestCode) {
+        Request request = requestRepository.findByCode(requestCode).orElse(null);
+
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
+        }
+
+        if (!Objects.equals(authenticatedUser.getClient().getId(), request.getPost().getClient().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the owner of the post");
+        }
+
+        if (request.getStatus() != RequestStatus.PENDING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request is not pending");
+        }
+
+        request.setStatus(RequestStatus.ACCEPTED);
+        requestRepository.save(request);
+
+        return chatRoomService.createRoom(request.getPost().getClient().getId(), request.getClient().getId(), request.getPost());
     }
 }
