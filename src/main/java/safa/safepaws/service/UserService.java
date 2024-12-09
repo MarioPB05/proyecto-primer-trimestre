@@ -147,4 +147,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting user data");
         }
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findTopByUsername(username).orElse(null);
+    }
 }

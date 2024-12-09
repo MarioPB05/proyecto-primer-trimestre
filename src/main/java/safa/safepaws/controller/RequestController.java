@@ -44,4 +44,9 @@ public class RequestController {
     public ResponseEntity<RequestStatusResponse> getRequestStatus(@PathVariable String requestCode){
         return ResponseEntity.ok(requestService.getRequestStatus(requestCode));
     }
+
+    @GetMapping("/{requestCode}/accept")
+    public ResponseEntity<String> acceptRequest(@PathVariable String requestCode){
+        return ResponseEntity.ok(requestService.acceptRequest(requestCode));
+    }
 }
