@@ -15,14 +15,12 @@ import safa.safepaws.model.ChatRoom;
 import safa.safepaws.model.User;
 import safa.safepaws.service.ChatMessageService;
 import safa.safepaws.service.ChatRoomService;
-import safa.safepaws.service.RequestService;
 import safa.safepaws.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -33,7 +31,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
     private final UserService userService;
-    private final RequestService requestService;
     private final Map<String, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
 
     @Override
@@ -50,7 +47,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         ChatRoom chatRoom = chatRoomService.findByCode(roomCode);
         List<ChatMessage> chatMessages = chatMessageService.findByChatRoomId(chatRoom.getId());
 
-        if (!chatMessages.isEmpty()) {
+        if (!chatMessages.isEmpty() && session.isOpen()) {
             session.sendMessage(new TextMessage(new ObjectMapper().writeValueAsString(new WebSocketMessage("server", "Mensajes Anteriores"))));
         }
 
@@ -90,6 +87,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         chatMessageService.save(chatMessageEntity);
 
         broadcastMessageToRoom(roomCode, chatMessage);
+
+        session.sendMessage(new TextMessage(new ObjectMapper().writeValueAsString(new WebSocketMessage("server-status", "successfully-sent"))));
     }
 
     @Override
@@ -105,10 +104,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        if (session.getAttributes().get("notify") != null && (boolean) session.getAttributes().get("notify")) {
-            String message = user.getUsername() + " se ha desconectado";
-            notifyRoom(roomCode, new WebSocketMessage("server", message));
-        }
+        String message = user.getUsername() + " se ha desconectado";
+        notifyRoom(roomCode, new WebSocketMessage("server", message));
 
         SecurityContextHolder.clearContext();
         super.afterConnectionClosed(session, status);
