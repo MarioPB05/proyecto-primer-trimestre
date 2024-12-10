@@ -6,7 +6,7 @@
   <title>Title</title>
   <style type="text/css">
     @page {
-      margin: 0;
+      margin: 10px 0;
       height: 100%;
     }
 
@@ -308,28 +308,6 @@
                      style="border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;border-top:10px solid #FF810A;border-right:0 solid #00000000;border-left:0 solid #00000000;width:600px;border-bottom:10px solid #FF810A"
                      role="none">
                 <tr>
-                  <td align="left" data-custom-paddings="true"
-                      style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-top:30px">
-                    <table width="100%" cellspacing="0" cellpadding="0" role="none"
-                           style="border-collapse:collapse;border-spacing:0px">
-                      <tr>
-                        <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
-                          <table width="100%" cellspacing="0" cellpadding="0"
-                                 role="presentation"
-                                 style="border-collapse:collapse;border-spacing:0px">
-                            <tr>
-                              <td align="left" style="padding:0;Margin:0">
-                                <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#666666;font-size:14px">
-                                  Diciembre 04, 2024</p>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
                   <td align="left"
                       style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-top:20px">
                     <table cellspacing="0" cellpadding="0" align="left" class="es-left" role="none"
@@ -353,22 +331,20 @@
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
                                   <br/></p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
-                                  De una parte, D./Dña. [NOMBRE_ADOPTANTE], en su
-                                  propio nombre y derecho, con DNI [DNI_ADOPTANTE],
-                                  con domicilio en [DOMICILIO_ADOPTANTE] en
-                                  [PUEBLO_CIUDAD_PROVINCIA], con el correo electrónico
-                                  [EMAIL_ADOPTANTE], en adelante el
+                                  De una parte, D./Dña. <span th:text="${adopter.getName() + ' ' + adopter.getSurname()}"></span>, en su
+                                  propio nombre y derecho, con DNI <span th:text="${adopter.getDni()}"></span>,
+                                  con domicilio en <span th:text="${adopter.getAddress().road}"></span> en
+                                  <span th:text="${adopter.getAddress().getProvince() + ', ' + adopter.getAddress().getState()}"></span>, con el correo electrónico
+                                  <span th:text="${adopter.getUser().getEmail()}"></span>, en adelante el
                                   <strong>Adoptante</strong>.</p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
                                   <br/></p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
-                                  Y, de otra parte, D./Dña.
-                                  [NOMBRE_RESPONSABLE_ADOPCIÓN], en su propio nombre y
-                                  derecho, con DNI [DNI_RESPONSABLE_ADOPCIÓN], con
-                                  domicilio en [DOMICILIO_RESPONSABLE_ADOPCIÓN] en
-                                  [PUEBLO_CIUDAD_PROVINCIA],
-                                  con el correo electrónico
-                                  [EMAIL_RESPONSABLE_ADOPCIÓN], en adelante el
+                                  Y, de otra parte, D./Dña. <span th:text="${owner.getName() + ' ' + owner.getSurname()}"></span>, en su
+                                  propio nombre y derecho, con DNI <span th:text="${owner.getDni()}"></span>,
+                                  con domicilio en <span th:text="${owner.getAddress().road}"></span> en
+                                  <span th:text="${owner.getAddress().getProvince() + ', ' + owner.getAddress().getState()}"></span>, con el correo electrónico
+                                  <span th:text="${owner.getUser().getEmail()}"></span>, en adelante el
                                   <strong>Responsable de Adopción</strong>.</p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
                                   <br/></p>
@@ -387,39 +363,19 @@
                                 <ol style="font-family:arial, 'helvetica neue', helvetica, sans-serif;padding:0 0 0px 40px;margin-top:15px;margin-bottom:15px;list-style-type:lower-alpha">
                                   <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
                                     <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px;">
-                                      ESPECIE:</p>
+                                      CÓDIGO DE ADOPCIÓN: <span th:text="${post.getCode()}"></span></p>
+                                  </li>
+                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
+                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px;">
+                                      CÓDIGO DE LA SOLICITUD: <span th:text="${request.getCode()}"></span></p>
                                   </li>
                                   <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
                                     <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      NOMBRE:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      Nº MICROCHIP:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      RAZA:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      SEXO:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      FECHA NACIMIENTO:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      COLOR:</p>
-                                  </li>
-                                  <li style="color:#333333;margin:0 0 15px;font-size:14px;line-height:14px">
-                                    <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      ESTERILIZADO:</p>
+                                      NOMBRE: <span th:text="${post.getName()}"></span></p>
                                   </li>
                                   <li style="color:#333333;margin:0px 0 15px;font-size:14px;line-height:14px">
                                     <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:14px;letter-spacing:0;color:#333333;font-size:14px">
-                                      OTRAS OBSERVACIONES:</p>
+                                      OTRAS OBSERVACIONES: <span th:text="${post.getDescription()}"></span></p>
                                   </li>
                                 </ol>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
@@ -512,7 +468,7 @@
                 </tr>
                 <tr>
                   <td align="left"
-                      style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-top:20px">
+                      style="Margin:0;padding:20px;">
                     <!--[if mso]>
                     <table style="width:560px" cellpadding="0" cellspacing="0">
                       <tr>
@@ -530,7 +486,9 @@
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
                                   Firma adoptante:</p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
-                                  [FIRMA_ADOPTANTE]</p>
+                                  <img width="150" height="150" th:if="${adopter_signed}" th:src="@{${adopter_signature}}" alt="Firma del Adoptante" />
+                                  <span style="color: red;" th:unless="${adopter_signed}">PENDIENTE DE FIRMA</span>
+                                </p>
                               </td>
                             </tr>
                           </table>
@@ -553,7 +511,9 @@
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
                                   Firma responsable de la adopción:</p>
                                 <p style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">
-                                  [FIRMA_RESPONSABLE_ADOPCIÓN]</p>
+                                  <img width="150" height="150" th:if="${owner_signed}" th:src="@{${owner_signature}}" alt="Firma del Responsable de Adopción" />
+                                  <span style="color: red;" th:unless="${owner_signed}">PENDIENTE DE FIRMA</span>
+                                </p>
                               </td>
                             </tr>
                           </table>
@@ -561,30 +521,6 @@
                       </tr>
                     </table>
                     <!--[if mso]></td></tr></table><![endif]-->
-                  </td>
-                </tr>
-                <tr>
-                  <td align="left"
-                      style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-top:20px">
-                    <table width="100%" cellpadding="0" cellspacing="0" role="none"
-                           style="border-collapse:collapse;border-spacing:0px">
-                      <tr>
-                        <td align="left" style="padding:0;Margin:0;width:560px">
-                          <table cellpadding="0" cellspacing="0" width="100%"
-                                 role="presentation"
-                                 style="border-collapse:collapse;border-spacing:0px">
-                            <tr>
-                              <td align="left" class="es-m-txt-l"
-                                  style="padding:0;Margin:0;font-size:0px"><img
-                                      src="https://flarzjy.stripocdn.email/content/guids/CABINET_964de5eaa02d59071e4a1d380a40f472240418a6f232aec656836386dc63b565/images/image_ZtE.png"
-                                      alt="" width="150" class="adapt-img"
-                                      style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"/>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
                   </td>
                 </tr>
               </table>
