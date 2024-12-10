@@ -45,6 +45,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
 
         ChatRoom chatRoom = chatRoomService.findByCode(roomCode);
+
+        if (chatRoom == null) {
+            session.close();
+            return;
+        }
+
         List<ChatMessage> chatMessages = chatMessageService.findByChatRoomId(chatRoom.getId());
 
         if (!chatMessages.isEmpty() && session.isOpen()) {
