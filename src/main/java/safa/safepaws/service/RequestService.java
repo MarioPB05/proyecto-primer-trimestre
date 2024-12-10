@@ -164,7 +164,7 @@ public class RequestService {
         request.setStatus(RequestStatus.ACCEPTED);
         requestRepository.save(request);
 
-        List<Request> requests = requestRepository.findAllByPostIdAndStatusIsNot(request.getPost().getId(), RequestStatus.ACCEPTED);
+        List<Request> requests = requestRepository.findAllByPostIdAndStatusNotIn(request.getPost().getId(), List.of(RequestStatus.ACCEPTED, RequestStatus.REJECTED));
 
         for (Request r : requests) {
             r.setStatus(RequestStatus.ADOPTED);
