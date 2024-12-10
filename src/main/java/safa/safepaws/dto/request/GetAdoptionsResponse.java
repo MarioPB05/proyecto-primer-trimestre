@@ -18,6 +18,6 @@ public class GetAdoptionsResponse {
     private String applierName;
     private String postName;
     private String postPhoto;
-    private String addressVillage;
+    private String addressProvince;
     private Boolean deleted;
 }

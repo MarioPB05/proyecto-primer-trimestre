@@ -24,7 +24,7 @@ public abstract  class RequestMapper {
     @Mapping(target = "applierName", source = "post.client.name")
     @Mapping(target = "postName", source = "post.name")
     @Mapping(target = "postPhoto", source = "post.photo")
-    @Mapping(target = "addressVillage", source = "post.address.village")
+    @Mapping(target = "addressProvince", source = "post.address.province")
     @Mapping(target = "chatRoomCode", source = "post.id", qualifiedByName = "getChatRoomCode")
     public abstract GetAdoptionsResponse toDTO(Request request);
 
