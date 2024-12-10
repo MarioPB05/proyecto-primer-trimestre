@@ -9,4 +9,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RequestStatusResponse {
     private Integer status;
+    private String chatRoomCode;
 }
