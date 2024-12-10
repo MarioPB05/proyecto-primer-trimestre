@@ -1,20 +1,26 @@
 package safa.safepaws.service;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.thymeleaf.context.Context;
 import safa.safepaws.dto.post.*;
 import safa.safepaws.enums.AnimalType;
 import safa.safepaws.enums.PostStatus;
 import safa.safepaws.mapper.PostMapper;
+import safa.safepaws.model.AdoptionContract;
 import safa.safepaws.model.Post;
+import safa.safepaws.model.Request;
 import safa.safepaws.model.User;
+import safa.safepaws.repository.AdoptionContractRepository;
 import safa.safepaws.repository.PostRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -25,6 +31,8 @@ public class PostService {
     private final User authenticatedUser;
     private final CloudinaryService cloudinaryService;
     private final AddressService addressService;
+    private final PdfService pdfService;
+    private final AdoptionContractRepository adoptionContractRepository;
 
     /**
      * Find a post by id
@@ -186,6 +194,83 @@ public class PostService {
             mapPostRequest.getNorthEast().getLatitude(),
             mapPostRequest.getNorthEast().getLongitude()
         ));
+    }
+
+    public Context getContext(Post post, Request request, AdoptionContract adoptionContract) {
+        if (adoptionContract == null) {
+            adoptionContract = adoptionContractRepository.findByPostId(post.getId()).orElse(null);
+
+            if (adoptionContract == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Adoption contract not found");
+            }
+        }
+
+        Context context = new Context();
+        context.setVariable("post", post);
+        context.setVariable("request", request);
+        context.setVariable("owner", authenticatedUser.getClient());
+        context.setVariable("adopter", request.getClient());
+
+        if (adoptionContract.getOwnerSignature() != null) {
+            context.setVariable("owner_signed", true);
+        }
+
+        if (adoptionContract.getAdopterSignature() != null) {
+            context.setVariable("adopter_signed", true);
+        }
+
+        context.setVariable("owner_signature", adoptionContract.getOwnerSignature() == null ? "Pendiente de firma" : adoptionContract.getOwnerSignature());
+        context.setVariable("adopter_signature", adoptionContract.getAdopterSignature() == null ? "Pendiente de firma" : adoptionContract.getAdopterSignature());
+
+        return context;
+    }
+
+    public Context getContext(Post post, Request request) {
+        return getContext(post, request, null);
+    }
+
+    @Transactional
+    public void generateAdoptionContract(Post post, Request request) throws Exception {
+        post.setStatus(PostStatus.ADOPTED);
+        postRepository.save(post);
+
+        AdoptionContract adoptionContract = new AdoptionContract();
+        adoptionContract.setPost(post);
+        adoptionContract.setDocument(pdfService.generatePdfAsBase64("adoption-contract", getContext(post, request, adoptionContract)));
+        adoptionContractRepository.save(adoptionContract);
+    }
+
+    public void saveSignature(Post post, Request request, String signature, Boolean isOwner) {
+        AdoptionContract adoptionContract = adoptionContractRepository.findByPostId(post.getId()).orElse(null);
+
+        if (adoptionContract == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Adoption contract not found");
+        }
+
+        if (isOwner) {
+            adoptionContract.setOwnerSignature(signature);
+            adoptionContract.setOwnerSignatureDate(LocalDateTime.now());
+        } else {
+            adoptionContract.setAdopterSignature(signature);
+            adoptionContract.setAdopterSignatureDate(LocalDateTime.now());
+        }
+
+        if (adoptionContract.getOwnerSignature() != null && adoptionContract.getAdopterSignature() != null) {
+            post.setStatus(PostStatus.ADOPTED);
+            postRepository.save(post);
+
+            try {
+                String document = pdfService.generatePdfAsBase64("adoption-contract", getContext(post, request, adoptionContract));
+                adoptionContract.setDocument(document);
+
+                String sha256 = pdfService.generateSha256FromBase64(document);
+                adoptionContract.setDocumentSha256(sha256);
+            }catch (Exception e){
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating hash");
+            }
+        }
+
+        adoptionContractRepository.save(adoptionContract);
     }
 
 }

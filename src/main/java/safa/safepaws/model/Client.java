@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Table(name = "client" , schema = "public", catalog = "safe_paws")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"address","user"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"address","user"})
 public class Client {
 
     @Id
@@ -41,4 +41,8 @@ public class Client {
 
     @Column(name="photo", nullable = false)
     private String photo;
+
+    @OneToOne(mappedBy = "client")
+    private User user;
+
 }

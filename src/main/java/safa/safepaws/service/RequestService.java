@@ -15,10 +15,8 @@ import safa.safepaws.dto.request.RequestStatusResponse;
 import safa.safepaws.dto.requestAnswer.CreateRequestAnswerRequest;
 import safa.safepaws.enums.RequestStatus;
 import safa.safepaws.mapper.RequestMapper;
-import safa.safepaws.model.Post;
-import safa.safepaws.model.Request;
-import safa.safepaws.model.RequestAnswer;
-import safa.safepaws.model.User;
+import safa.safepaws.model.*;
+import safa.safepaws.repository.AdoptionContractRepository;
 import safa.safepaws.repository.RequestAnswerRepository;
 import safa.safepaws.repository.RequestRepository;
 
@@ -40,6 +38,7 @@ public class RequestService {
     private final RequestAnswerService requestAnswerService;
     private final PdfService pdfService;
     private final ChatRoomService chatRoomService;
+    private final AdoptionContractRepository adoptionContractRepository;
 
     public String delete (Integer id){
         Request request = requestRepository.findById(id).orElse(null);
@@ -137,10 +136,10 @@ public class RequestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
         }
 
-        return new RequestStatusResponse(request.getStatus().getId());
+        return new RequestStatusResponse(request.getStatus().getId(), chatRoomService.getChatRoomCode(request.getPost().getId()));
     }
 
-    public String acceptRequest(String requestCode) {
+    private Request getRequestFromCode(String requestCode) {
         Request request = requestRepository.findByCode(requestCode).orElse(null);
 
         if (request == null) {
@@ -155,9 +154,91 @@ public class RequestService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request is not pending");
         }
 
+        return request;
+    }
+
+    @Transactional
+    public String acceptRequest(String requestCode) throws Exception {
+        Request request = getRequestFromCode(requestCode);
+
         request.setStatus(RequestStatus.ACCEPTED);
         requestRepository.save(request);
 
+        List<Request> requests = requestRepository.findAllByPostIdAndStatusIsNot(request.getPost().getId(), RequestStatus.ACCEPTED);
+
+        for (Request r : requests) {
+            r.setStatus(RequestStatus.ADOPTED);
+            requestRepository.save(r);
+        }
+
+        postService.generateAdoptionContract(request.getPost(), request);
+
         return chatRoomService.createRoom(request.getPost().getClient().getId(), request.getClient().getId(), request.getPost());
+    }
+
+    public String rejectRequest(String requestCode) {
+        Request request = getRequestFromCode(requestCode);
+
+        request.setStatus(RequestStatus.REJECTED);
+        requestRepository.save(request);
+
+        return "Request rejected";
+    }
+
+    public void downloadAdoptionContractPdf(String requestCode, HttpServletResponse response) throws Exception {
+        Request request = requestRepository.findByCode(requestCode).orElse(null);
+
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
+        }
+
+        AdoptionContract adoptionContract = adoptionContractRepository.findByPostId(request.getPost().getId()).orElse(null);
+
+        if (adoptionContract == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Adoption contract not found");
+        }
+
+        if (adoptionContract.getDocumentSha256() != null) {
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=contract-sha.pdf");
+            response.getOutputStream().write(pdfService.decodeBase64ToPdf(adoptionContract.getDocument()));
+            return;
+        }
+
+        byte[] pdfBytes = pdfService.generatePdf("adoption-contract", postService.getContext(request.getPost(), request));
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=contract.pdf");
+        response.getOutputStream().write(pdfBytes);
+    }
+
+    public Boolean signContract(String requestCode, String signature, Boolean isOwner) {
+        Request request = requestRepository.findByCode(requestCode).orElse(null);
+
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
+        }
+
+        if (isOwner && !Objects.equals(request.getPost().getClient().getId(), authenticatedUser.getClient().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the owner of the post");
+        }
+
+        if (!isOwner && !Objects.equals(request.getClient().getId(), authenticatedUser.getClient().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the adopter of the post");
+        }
+
+        postService.saveSignature(request.getPost(), request, signature, isOwner);
+
+        if (isOwner) {
+            // El dueño es el primero que genera el contrato, y por ende el primero que firma
+            request.setStatus(RequestStatus.PENDING_SIGNATURE);
+        } else {
+            // Cuando el adoptante firma el contrato, se cambia el estado de la solicitud a finalizado.
+            request.setStatus(RequestStatus.FINISHED);
+        }
+
+        requestRepository.save(request);
+
+        return true;
     }
 }

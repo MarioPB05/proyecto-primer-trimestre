@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import safa.safepaws.dto.post.SignContractRequest;
 import safa.safepaws.dto.request.GetAdoptionsResponse;
 import safa.safepaws.dto.request.RequestCreateDTO;
 import safa.safepaws.dto.request.RequestStatusResponse;
@@ -45,8 +46,25 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getRequestStatus(requestCode));
     }
 
+    @Transactional
     @GetMapping("/{requestCode}/accept")
-    public ResponseEntity<String> acceptRequest(@PathVariable String requestCode){
+    public ResponseEntity<String> acceptRequest(@PathVariable String requestCode) throws Exception {
         return ResponseEntity.ok(requestService.acceptRequest(requestCode));
+    }
+
+    @GetMapping("/{requestCode}/reject")
+    public ResponseEntity<String> rejectRequest(@PathVariable String requestCode) {
+        return ResponseEntity.ok(requestService.rejectRequest(requestCode));
+    }
+
+    @GetMapping("/{requestCode}/contract")
+    @ResponseBody
+    public void generatePostPdf(@PathVariable String requestCode, HttpServletResponse response) throws Exception {
+        requestService.downloadAdoptionContractPdf(requestCode, response);
+    }
+
+    @PostMapping("/{requestCode}/sign-contract")
+    public ResponseEntity<Boolean> signContract(@PathVariable String requestCode, @RequestBody SignContractRequest signContractRequest){
+        return ResponseEntity.ok(requestService.signContract(requestCode, signContractRequest.getSignature(), signContractRequest.getIsOwner()));
     }
 }
