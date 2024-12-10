@@ -17,7 +17,7 @@ public interface RequestRepository  extends JpaRepository<Request, Integer> {
 
     Optional<Request> findByClientIdAndPostIdAndDeletedIsFalse(Integer clientId, Integer postId);
 
-    List<Request> findAllByPostIdAndStatusIsNot(Integer postId, RequestStatus status);
+    List<Request> findAllByPostIdAndStatusNotIn(Integer postId, List<RequestStatus> status);
 
     @Query("SELECT r FROM Request r WHERE r.client.id = :clientId AND r.deleted = false")
     List<Request> findAllByClientIdSent(@Param("clientId") Integer clientId);
