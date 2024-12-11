@@ -24,7 +24,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client_id;
+    private Client client;
 
     @Column(name = "name" , nullable = false)
     private String name;
@@ -35,24 +35,28 @@ public class Post {
     @Column(name = "photo", nullable = false)
     private String photo;
 
-    @Column(name = "coordinate_x",nullable = false)
-    private Integer coordinate_x;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private Integer coordinate_y;
-
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private PostStatus status;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private AnimalType type;
 
     @Column(name = "urgent", nullable = false)
     private boolean urgent;
 
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creation_date;
+    private LocalDate creationDate;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
+
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @Column(name = "code", nullable = false)
+    private String code;
+
 }

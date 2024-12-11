@@ -3,18 +3,21 @@ package safa.safepaws.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import safa.safepaws.enums.Role;
 
-@Entity
+import java.util.Collection;
+import java.util.List;
 
+@Entity
 @Table(name = "user" , schema = "public", catalog = "safe_paws")
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
+@Builder
 @NoArgsConstructor
-@EqualsAndHashCode
-public class User {
+@AllArgsConstructor
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +41,31 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client_id;
+    private Client client;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rol.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !this.ban;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !this.ban;
+    }
 
 }

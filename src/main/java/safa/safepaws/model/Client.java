@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Table(name = "client" , schema = "public", catalog = "safe_paws")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"address","user"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"address","user"})
 public class Client {
 
     @Id
@@ -33,11 +33,16 @@ public class Client {
     private String dni;
 
     @Column(name = "registration_date", nullable = false)
-    private LocalDate registration_date;
+    private LocalDate registrationDate;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
+    @Column(name="photo", nullable = false)
+    private String photo;
 
+    @OneToOne(mappedBy = "client")
+    private User user;
 
 }
